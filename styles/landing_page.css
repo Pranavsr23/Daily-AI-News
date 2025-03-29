@@ -84,125 +84,74 @@ body {
 
 /* --- Calendar Section --- */
 .calendar-section {
-    background: rgba(255, 255, 255, 0.1); /* Slightly lighter box for calendar */
+    /* REMOVE or comment out the old background:
+       background: rgba(255, 255, 255, 0.1); */
+
+    /* ADD these lines for the background image */
+    background-image: url('../images/calendar_bg.jpg'); /* Adjust the path if needed! */
+    background-size: cover;        /* Cover the entire section */
+    background-position: center;   /* Center the image */
+    background-repeat: no-repeat;
+
+    /* Optional: Add a slight overlay IF your text becomes hard to read */
+    /* This creates a dark overlay on top of the image for better contrast */
+    /* You might need to adjust text colors too (e.g., --text-light) */
+    background-color: rgba(10, 20, 30, 0.75); /* Dark semi-transparent overlay */
+    background-blend-mode: multiply; /* Blends the color overlay with the image */
+
+
+    /* --- Keep the rest of the calendar-section styles --- */
     padding: 20px;
     border-radius: var(--border-radius);
     margin-top: 15px;
+    position: relative; /* Needed if you use pseudo-elements later */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Maybe add a shadow */
 }
 
-#calendar-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+/* Ensure text elements inside have good contrast against the new background */
+#calendar-month-year,
+.calendar-day:not(.has-news), /* Adjust non-news day color if needed */
+.landing-footer,
+.calendar-hint {
+    /* You might need to force text color if the background is complex */
+     color: var(--text-light); /* Example: Keep text light */
+     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow for readability */
 }
 
-#calendar-month-year {
-    font-size: 1.6em;
-    font-weight: 600;
-    color: var(--text-light);
-    flex-grow: 1; /* Takes up space */
-}
-
+/* Ensure buttons and links are still visible */
 #calendar-controls button {
-    background-color: transparent;
-    border: 2px solid var(--text-light);
+    border-color: var(--text-light);
     color: var(--text-light);
-    padding: 5px 12px;
-    font-size: 1.2em;
-    border-radius: 50%; /* Circle buttons */
-    cursor: pointer;
-    transition: background-color var(--transition-speed), transform var(--transition-speed);
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 #calendar-controls button:hover,
 #calendar-controls button:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-    outline: none;
-}
-
-/* Calendar Grid */
-#calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
-    gap: 8px; /* Space between cells */
-    animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.calendar-weekday,
-.calendar-day {
-    text-align: center;
-    padding: 8px 0;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+     background-color: rgba(255, 255, 255, 0.2); /* Adjust hover as needed */
 }
 
 .calendar-weekday {
-    font-size: 0.85em;
-    color: var(--accent-color); /* Highlight weekdays */
-    text-transform: uppercase;
-    font-weight: 600;
+    color: var(--accent-color); /* Accent color should still work */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.calendar-day {
-    font-size: 1em;
-    min-height: 40px; /* Consistent height */
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    position: relative;
-    transition: background-color var(--transition-speed), transform var(--transition-speed);
-}
-
-.calendar-day.empty {
-    background-color: transparent; /* Make empty cells invisible */
-    opacity: 0.5;
-}
-
+/* Highlighted news day - ensure it stands out */
 .calendar-day.has-news {
-    background-color: var(--primary-color); /* Highlight days with news */
-    font-weight: bold;
-    color: var(--text-light);
+     background-color: var(--primary-color);
+     opacity: 0.9; /* Slightly transparent to let image show through */
 }
 
 .calendar-day.has-news a {
-    color: inherit; /* Inherit color from parent */
-    text-decoration: none;
-    display: block; /* Make link fill the cell */
-    width: 100%;
-    height: 100%;
-    border-radius: 4px; /* Match parent radius */
-    position: relative;
-    z-index: 1;
-    transition: background-color var(--transition-speed);
-}
-.calendar-day.has-news a:hover,
-.calendar-day.has-news a:focus {
-    background-color: rgba(255, 255, 255, 0.3); /* Subtle hover */
-    outline: none;
-}
-.calendar-day.has-news a:focus {
-     box-shadow: 0 0 0 2px var(--accent-color); /* Focus indicator */
+    color: var(--text-light); /* Ensure link text is readable */
+     text-shadow: none; /* Remove shadow from link text maybe? */
 }
 
-
+/* Current day highlight */
 .calendar-day.today {
-    outline: 2px solid var(--accent-color); /* Highlight current day */
-    outline-offset: 2px;
+     outline-color: var(--accent-color);
+     /* Maybe add subtle background or stronger outline */
+     background-color: rgba(255, 140, 66, 0.2); /* Light accent overlay */
 }
-
 
 .calendar-hint {
     font-size: 0.9em;
