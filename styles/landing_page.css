@@ -1,5 +1,4 @@
 /* styles/landing_page.css */
-
 :root {
     --primary-color: #0a7ea3; /* Teal/Blue */
     --secondary-color: #f2fafd; /* Very light blue */
@@ -10,19 +9,16 @@
     --border-radius: 8px;
     --transition-speed: 0.3s;
 }
-
 /* --- Reset and Base --- */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
 html, body {
     height: 100%;
     overflow-x: hidden; /* Prevent horizontal scrollbar */
 }
-
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-light);
@@ -33,7 +29,6 @@ body {
     text-align: center;
     min-height: 100vh; /* Ensure it takes full viewport height */
 }
-
 /* --- Background Image Handling --- */
 .landing-background {
     position: fixed; /* Fixed position to stay during scroll (if content overflows) */
@@ -50,7 +45,6 @@ body {
     background-color: #2b3e50;
     background-image: linear-gradient(to bottom right, #1a2938, #3c526a);
 }
-
 /* --- Main Container & Content Styling --- */
 .landing-container {
     max-width: 700px; /* Max width of the content box */
@@ -66,7 +60,6 @@ body {
     gap: 25px; /* Space between header, main, footer */
     margin: 20px 0; /* Add some margin top/bottom on smaller viewports if content grows */
 }
-
 .landing-header h1 {
     font-size: 2.8em;
     margin-bottom: 5px;
@@ -74,92 +67,124 @@ body {
     font-weight: 700;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
-
 .landing-header p {
     font-size: 1.1em;
     color: var(--text-light);
     opacity: 0.9;
     font-weight: 300;
 }
-
 /* --- Calendar Section --- */
 .calendar-section {
-    /* REMOVE or comment out the old background:
-       background: rgba(255, 255, 255, 0.1); */
-
-    /* ADD these lines for the background image */
-    background-image: url('../images/calendar_bg.jpg'); /* Adjust the path if needed! */
-    background-size: cover;        /* Cover the entire section */
-    background-position: center;   /* Center the image */
-    background-repeat: no-repeat;
-
-    /* Optional: Add a slight overlay IF your text becomes hard to read */
-    /* This creates a dark overlay on top of the image for better contrast */
-    /* You might need to adjust text colors too (e.g., --text-light) */
-    background-color: rgba(10, 20, 30, 0.75); /* Dark semi-transparent overlay */
-    background-blend-mode: multiply; /* Blends the color overlay with the image */
-
-
-    /* --- Keep the rest of the calendar-section styles --- */
+    background: rgba(255, 255, 255, 0.1); /* Slightly lighter box for calendar */
     padding: 20px;
     border-radius: var(--border-radius);
     margin-top: 15px;
-    position: relative; /* Needed if you use pseudo-elements later */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Maybe add a shadow */
 }
-
-/* Ensure text elements inside have good contrast against the new background */
-#calendar-month-year,
-.calendar-day:not(.has-news), /* Adjust non-news day color if needed */
-.landing-footer,
-.calendar-hint {
-    /* You might need to force text color if the background is complex */
-     color: var(--text-light); /* Example: Keep text light */
-     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow for readability */
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
-
-/* Ensure buttons and links are still visible */
-#calendar-controls button {
-    border-color: var(--text-light);
+#calendar-month-year {
+    font-size: 1.6em;
+    font-weight: 600;
     color: var(--text-light);
-     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    flex-grow: 1; /* Takes up space */
 }
-
+#calendar-controls button {
+    background-color: transparent;
+    border: 2px solid var(--text-light);
+    color: var(--text-light);
+    padding: 5px 12px;
+    font-size: 1.2em;
+    border-radius: 50%; /* Circle buttons */
+    cursor: pointer;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
 #calendar-controls button:hover,
 #calendar-controls button:focus {
-     background-color: rgba(255, 255, 255, 0.2); /* Adjust hover as needed */
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    outline: none;
 }
-
+/* Calendar Grid */
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    gap: 8px; /* Space between cells */
+    animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.calendar-weekday,
+.calendar-day {
+    text-align: center;
+    padding: 8px 0;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .calendar-weekday {
-    color: var(--accent-color); /* Accent color should still work */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 0.85em;
+    color: var(--accent-color); /* Highlight weekdays */
+    text-transform: uppercase;
+    font-weight: 600;
 }
-
-/* Highlighted news day - ensure it stands out */
+.calendar-day {
+    font-size: 1em;
+    min-height: 40px; /* Consistent height */
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    position: relative;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+.calendar-day.empty {
+    background-color: transparent; /* Make empty cells invisible */
+    opacity: 0.5;
+}
 .calendar-day.has-news {
-     background-color: var(--primary-color);
-     opacity: 0.9; /* Slightly transparent to let image show through */
+    background-color: var(--primary-color); /* Highlight days with news */
+    font-weight: bold;
+    color: var(--text-light);
 }
-
 .calendar-day.has-news a {
-    color: var(--text-light); /* Ensure link text is readable */
-     text-shadow: none; /* Remove shadow from link text maybe? */
+    color: inherit; /* Inherit color from parent */
+    text-decoration: none;
+    display: block; /* Make link fill the cell */
+    width: 100%;
+    height: 100%;
+    border-radius: 4px; /* Match parent radius */
+    position: relative;
+    z-index: 1;
+    transition: background-color var(--transition-speed);
 }
-
-/* Current day highlight */
+.calendar-day.has-news a:hover,
+.calendar-day.has-news a:focus {
+    background-color: rgba(255, 255, 255, 0.3); /* Subtle hover */
+    outline: none;
+}
+.calendar-day.has-news a:focus {
+     box-shadow: 0 0 0 2px var(--accent-color); /* Focus indicator */
+}
 .calendar-day.today {
-     outline-color: var(--accent-color);
-     /* Maybe add subtle background or stronger outline */
-     background-color: rgba(255, 140, 66, 0.2); /* Light accent overlay */
+    outline: 2px solid var(--accent-color); /* Highlight current day */
+    outline-offset: 2px;
 }
-
 .calendar-hint {
     font-size: 0.9em;
     margin-top: 15px;
     opacity: 0.8;
     font-style: italic;
 }
-
 .loading-placeholder {
     grid-column: 1 / -1; /* Span all columns */
     padding: 40px 0;
@@ -167,26 +192,21 @@ body {
     color: var(--text-light);
     opacity: 0.8;
 }
-
-
 /* --- Footer --- */
 .landing-footer {
     margin-top: 15px;
     font-size: 0.85em;
     opacity: 0.8;
 }
-
 .landing-footer a {
     color: var(--accent-color);
     text-decoration: none;
     transition: text-decoration var(--transition-speed);
 }
-
 .landing-footer a:hover,
 .landing-footer a:focus {
     text-decoration: underline;
 }
-
 /* --- Responsive Adjustments --- */
 @media (max-width: 600px) {
     .landing-header h1 {
