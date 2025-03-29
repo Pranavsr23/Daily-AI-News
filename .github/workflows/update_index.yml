@@ -1,0 +1,117 @@
+name: Update Index HTML News List
+
+on:
+  push:
+    branches:
+      - main # Or your default branch (e.g., master)
+    paths:
+      - 'AI-News-*.html' # Only trigger if news files are added/changed
+      - '.github/workflows/update_index.yml' # Allow updates to the workflow itself
+
+permissions:
+  contents: write # Allow workflow to write back to the repository
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Generate News List and Update Index
+        id: generate_list
+        run: |
+          echo "Searching for AI-News-*.html files..."
+          news_files=$(find . -maxdepth 1 -name 'AI-News-*.html' -type f -printf "%f\n")
+          
+          if [ -z "$news_files" ]; then
+            echo "No news files found. Skipping index update."
+            echo "::set-output name=updated::false"
+            exit 0
+          fi
+
+          json_entries=""
+          
+          # Requires GNU date for -d flag formatting
+          for filename in $news_files; do
+            echo "Processing $filename"
+            # Extract DDMMYYYY part
+            date_ddmmyyyy=$(echo "$filename" | sed -n 's/^AI-News-\([0-9]\{8\}\)\.html$/\1/p')
+            
+            if [ -z "$date_ddmmyyyy" ]; then
+              echo "Warning: Could not extract date from $filename. Skipping."
+              continue
+            fi
+            
+            # Extract parts: DD, MM, YYYY
+            day="${date_ddmmyyyy:0:2}"
+            month="${date_ddmmyyyy:2:2}"
+            year="${date_ddmmyyyy:4:4}"
+            
+            # Convert to YYYY-MM-DD format
+            # Use 'date' command for robust conversion and validation
+            formatted_date=$(date -d "$year-$month-$day" "+%Y-%m-%d" 2>/dev/null)
+
+            if [ $? -ne 0 ]; then
+               echo "Warning: Invalid date format $day-$month-$year in $filename. Skipping."
+               continue
+            fi
+
+            # Optional: Try to extract title (simple version, might break with complex titles)
+            # Escape quotes within the title for valid JSON
+            title=$(grep -o -m 1 '<title>[^<]*</title>' "$filename" | sed -e 's/<title>\(.*\)<\/title>/\1/' -e 's/"/\\"/g')
+            if [ -z "$title" ]; then
+                title="AI News for $day/$month/$year" # Fallback title
+            fi
+            
+            # Build JSON entry
+            entry="{\"date\": \"$formatted_date\", \"url\": \"$filename\", \"title\": \"$title\"}"
+            
+            # Append to list (comma separator)
+            if [ -z "$json_entries" ]; then
+              json_entries="$entry"
+            else
+              json_entries="$json_entries, $entry"
+            fi
+          done
+
+          # Check if any valid entries were generated
+          if [ -z "$json_entries" ]; then
+            echo "No valid news entries generated. Skipping index update."
+            echo "::set-output name=updated::false"
+            exit 0
+          fi
+
+          # Assemble the full JavaScript array string
+          js_array="const availableNewsPages = [ $json_entries ];"
+
+          # Use awk to replace content between placeholder comments in index.html
+          # This is more robust than sed for multiline replacements
+          awk -v js_arr="$js_array" '
+          /<!-- AVAILABLE_NEWS_PAGES_PLACEHOLDER -->/ { print; print "    <script>"; print "      " js_arr; print "    </script>"; skip=1 }
+          /<!-- END AVAILABLE_NEWS_PAGES_PLACEHOLDER -->/ { skip=0 }
+          !skip { print }
+          ' index.html > index.html.tmp && mv index.html.tmp index.html
+
+          echo "Index.html updated successfully."
+          echo "::set-output name=updated::true"
+
+      - name: Commit and Push Changes
+        if: steps.generate_list.outputs.updated == 'true' # Only commit if changed
+        run: |
+          # Check if index.html actually changed
+          if ! git diff --quiet index.html; then
+            echo "Changes detected in index.html. Committing..."
+            git add index.html
+            git commit -m "Automated update: Refresh AI news list in index.html"
+            git push origin ${{ github.ref }} # Push to the same branch the workflow ran on
+          else
+            echo "No changes in index.html required. Skipping commit."
+          fi
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
