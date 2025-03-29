@@ -15,7 +15,7 @@ jobs:
 
     - name: Update index.html navigation
       run: |
-        # Get a list of all .html files in the repository
+        # Get a list of all .html files in the repository (excluding index.html)
         html_files=$(find . -type f -name "*.html" ! -name "index.html")
         
         # Start building the navigation list with proper formatting
@@ -30,10 +30,14 @@ jobs:
 
         nav_list+="\n  </ul>\n</nav>"
 
-        # Replace the existing nav section in index.html with the updated one
-        # Use a more structured way to preserve the formatting
-        sed -i.bak '/<nav>/,/<\/nav>/c\\'$nav_list'' index.html
-        rm index.html.bak
+        # Create a temporary file to store the updated HTML content
+        echo "$nav_list" > updated_nav.html
+
+        # Use sed to replace the existing nav section with the new one
+        sed -i.bak '/<nav>/,/<\/nav>/ {r updated_nav.html' -e 'd}' index.html
+
+        # Remove the temporary file
+        rm updated_nav.html
 
     - name: Commit and push changes
       run: |
