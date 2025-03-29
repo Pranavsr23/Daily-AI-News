@@ -1,0 +1,131 @@
+/* styles/report_styles.css */
+
+/* Add these styles for responsive images */
+.article-image {
+    display: block;          /* Make it a block element for margin control */
+    max-width: 100%;       /* Crucial: Image will not exceed the container width */
+    height: auto;          /* Maintain aspect ratio automatically */
+    margin-top: 10px;        /* Add some space above the image */
+    margin-bottom: 15px;     /* Add space between image and text below */
+    margin-left: auto;       /* Center the image horizontally */
+    margin-right: auto;      /* Center the image horizontally */
+    border-radius: 4px;      /* Optional: Add slightly rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Add subtle shadow */
+}
+
+/* Optional: Adjustments for smaller screens if needed */
+@media (max-width: 600px) {
+    .article-image {
+        margin-bottom: 10px; /* Slightly less margin on mobile */
+        border-radius: 2px;  /* Slightly less rounding on mobile */
+    }
+    /* You might want to adjust overall .article padding or font sizes here too */
+}
+
+/* --- Keep your existing styles below this --- */
+/* For example: */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px; /* Or your preferred max width */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.report-meta {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.article {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.article:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.article h2 {
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.article h2 a {
+    text-decoration: none;
+    color: #0056b3; /* A standard link blue */
+}
+
+.article h2 a:hover,
+.article h2 a:focus {
+    text-decoration: underline;
+    color: #003d80;
+}
+
+.article .meta {
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.article .description {
+    font-size: 1em;
+    color: #444;
+}
+
+.no-articles {
+    text-align: center;
+    color: #777;
+    padding: 30px;
+    font-style: italic;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 0.8em;
+    color: #777;
+}
+
+.footer a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.footer a:hover,
+.footer a:focus {
+     text-decoration: underline;
+}
+
+/* Style for articles that had errors during processing */
+.article.error {
+    border: 1px solid #e74c3c; /* Red border */
+    background-color: #fceded; /* Light red background */
+    padding: 15px;
+    border-radius: 4px;
+}
