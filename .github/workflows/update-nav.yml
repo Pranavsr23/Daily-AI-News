@@ -1,0 +1,40 @@
+name: Update Navigation on Push
+
+on:
+  push:
+    branches:
+      - main  # Or use 'master' depending on your branch name
+
+jobs:
+  update-nav:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update index.html navigation
+      run: |
+        # Get a list of all .html files in the repository
+        html_files=$(find . -type f -name "*.html" ! -name "index.html")
+        
+        # Start building the navigation list
+        nav_list="<nav><ul>"
+        for file in $html_files; do
+          # Extract file name without path
+          file_name=$(basename $file)
+          # Add the list item to the navigation
+          nav_list+="<li><a href=\"$file_name\">$file_name</a></li>"
+        done
+        nav_list+="</ul></nav>"
+
+        # Replace the existing nav section in index.html with the updated one
+        sed -i "/<nav>/,/<\/nav>/c\\$nav_list" index.html
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add index.html
+        git commit -m "Auto-update navigation in index.html"
+        git push origin main
