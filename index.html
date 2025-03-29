@@ -1,6 +1,53 @@
-<nav>
-  <ul>
-    <li><a href="AI-News-29032025.html">AI-News-29032025.html</a></li>
-  </ul>
-</nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily AI News Archive</title>
+    <link rel="stylesheet" href="styles/landing_page.css">
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+</head>
+<body>
+    <div class="landing-background"></div>
 
+    <div class="landing-container">
+        <header class="landing-header">
+            <h1>AI News Chronicle</h1>
+            <p>Your daily byte of AI evolution. Explore the archive below.</p>
+        </header>
+
+        <main class="calendar-section">
+            <div id="calendar-controls">
+                <button id="prev-month" aria-label="Previous Month"><</button>
+                <h2 id="calendar-month-year">Month Year</h2>
+                <button id="next-month" aria-label="Next Month">></button>
+            </div>
+            <div id="calendar-grid" aria-live="polite">
+                <div class="loading-placeholder">Loading Calendar...</div>
+            </div>
+             <p class="calendar-hint">Click on a highlighted date to read the news for that day.</p>
+        </main>
+
+        <footer class="landing-footer">
+            <p>© <span id="current-year"></span> Your AI News Site. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- IMPORTANT: Data for available news pages. -->
+    <!-- This array will be automatically generated and replaced by the GitHub Action. -->
+    <!-- AVAILABLE_NEWS_PAGES_PLACEHOLDER -->
+    <script>
+      const availableNewsPages = []; // Default empty array, will be replaced
+    </script>
+    <!-- END AVAILABLE_NEWS_PAGES_PLACEHOLDER -->
+
+
+    <!-- You MUST replace 'YOUR_UNSPLASH_ACCESS_KEY' with your actual key -->
+    <!-- It's STRONGLY recommended to use GitHub Secrets instead of hardcoding -->
+    <script>
+      const unsplashApiKey = 'YOUR_UNSPLASH_ACCESS_KEY'; // Replace! Or manage via secrets.
+    </script>
+
+    <script src="scripts/landing_page.js"></script>
+</body>
+</html>
