@@ -31,10 +31,10 @@ jobs:
         nav_list+="\n  </ul>\n</nav>"
 
         # Create a temporary file to store the updated HTML content
-        echo "$nav_list" > updated_nav.html
+        echo -e "$nav_list" > updated_nav.html
 
         # Use perl to replace the <nav> section with the new one
-        perl -0777 -i -pe 's/<nav>.*?<\/nav>/$(cat updated_nav.html)/s' index.html
+        perl -0777 -i -pe 'local $/ = undef; $_ = `cat updated_nav.html`; s/<nav>.*?<\/nav>/$_/s' index.html
 
         # Remove the temporary file
         rm updated_nav.html
