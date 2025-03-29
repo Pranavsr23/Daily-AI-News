@@ -1,0 +1,271 @@
+/* styles/landing_page.css */
+
+:root {
+    --primary-color: #0a7ea3; /* Teal/Blue */
+    --secondary-color: #f2fafd; /* Very light blue */
+    --accent-color: #ff8c42; /* Orange accent */
+    --text-light: #f8f8f8;
+    --text-dark: #333;
+    --background-overlay: rgba(0, 0, 0, 0.5); /* Overlay for background image */
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
+
+/* --- Reset and Base --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-light);
+    position: relative; /* Needed for background pseudo-element or div */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh; /* Ensure it takes full viewport height */
+}
+
+/* --- Background Image Handling --- */
+.landing-background {
+    position: fixed; /* Fixed position to stay during scroll (if content overflows) */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Behind all content */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transition: background-image var(--transition-speed) ease-in-out; /* Smooth transition */
+    /* Default fallback background */
+    background-color: #2b3e50;
+    background-image: linear-gradient(to bottom right, #1a2938, #3c526a);
+}
+
+/* --- Main Container & Content Styling --- */
+.landing-container {
+    max-width: 700px; /* Max width of the content box */
+    width: 90%; /* Responsive width */
+    padding: 30px 40px;
+    background-color: var(--background-overlay); /* Semi-transparent background */
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+    -webkit-backdrop-filter: blur(5px); /* Safari */
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Space between header, main, footer */
+    margin: 20px 0; /* Add some margin top/bottom on smaller viewports if content grows */
+}
+
+.landing-header h1 {
+    font-size: 2.8em;
+    margin-bottom: 5px;
+    color: var(--text-light);
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.landing-header p {
+    font-size: 1.1em;
+    color: var(--text-light);
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* --- Calendar Section --- */
+.calendar-section {
+    background: rgba(255, 255, 255, 0.1); /* Slightly lighter box for calendar */
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 15px;
+}
+
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#calendar-month-year {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: var(--text-light);
+    flex-grow: 1; /* Takes up space */
+}
+
+#calendar-controls button {
+    background-color: transparent;
+    border: 2px solid var(--text-light);
+    color: var(--text-light);
+    padding: 5px 12px;
+    font-size: 1.2em;
+    border-radius: 50%; /* Circle buttons */
+    cursor: pointer;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calendar-controls button:hover,
+#calendar-controls button:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    outline: none;
+}
+
+/* Calendar Grid */
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    gap: 8px; /* Space between cells */
+    animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.calendar-weekday,
+.calendar-day {
+    text-align: center;
+    padding: 8px 0;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-weekday {
+    font-size: 0.85em;
+    color: var(--accent-color); /* Highlight weekdays */
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.calendar-day {
+    font-size: 1em;
+    min-height: 40px; /* Consistent height */
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    position: relative;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.calendar-day.empty {
+    background-color: transparent; /* Make empty cells invisible */
+    opacity: 0.5;
+}
+
+.calendar-day.has-news {
+    background-color: var(--primary-color); /* Highlight days with news */
+    font-weight: bold;
+    color: var(--text-light);
+}
+
+.calendar-day.has-news a {
+    color: inherit; /* Inherit color from parent */
+    text-decoration: none;
+    display: block; /* Make link fill the cell */
+    width: 100%;
+    height: 100%;
+    border-radius: 4px; /* Match parent radius */
+    position: relative;
+    z-index: 1;
+    transition: background-color var(--transition-speed);
+}
+.calendar-day.has-news a:hover,
+.calendar-day.has-news a:focus {
+    background-color: rgba(255, 255, 255, 0.3); /* Subtle hover */
+    outline: none;
+}
+.calendar-day.has-news a:focus {
+     box-shadow: 0 0 0 2px var(--accent-color); /* Focus indicator */
+}
+
+
+.calendar-day.today {
+    outline: 2px solid var(--accent-color); /* Highlight current day */
+    outline-offset: 2px;
+}
+
+
+.calendar-hint {
+    font-size: 0.9em;
+    margin-top: 15px;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.loading-placeholder {
+    grid-column: 1 / -1; /* Span all columns */
+    padding: 40px 0;
+    font-size: 1.1em;
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+
+/* --- Footer --- */
+.landing-footer {
+    margin-top: 15px;
+    font-size: 0.85em;
+    opacity: 0.8;
+}
+
+.landing-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: text-decoration var(--transition-speed);
+}
+
+.landing-footer a:hover,
+.landing-footer a:focus {
+    text-decoration: underline;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    .landing-header h1 {
+        font-size: 2.2em;
+    }
+    .landing-header p {
+        font-size: 1em;
+    }
+    .landing-container {
+        width: 95%;
+        padding: 25px 20px;
+    }
+    #calendar-month-year {
+        font-size: 1.4em;
+    }
+    .calendar-weekday {
+        font-size: 0.75em;
+    }
+    .calendar-day {
+        font-size: 0.9em;
+        min-height: 35px;
+    }
+    #calendar-controls button {
+        width: 35px;
+        height: 35px;
+        font-size: 1em;
+    }
+    #calendar-grid {
+      gap: 4px;
+    }
+}
